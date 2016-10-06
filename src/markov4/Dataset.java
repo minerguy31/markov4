@@ -5,7 +5,6 @@ import gnu.trove.map.hash.TObjectIntHashMap;
 import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Random;
 
 import static jpkg.ngram.NGram.getPaired;
@@ -13,9 +12,6 @@ import jpkg.collection.set.MultiSet;
 
 public class Dataset {
 	public HashMap<String, MultiSet<String>> pairset = new HashMap<>();
-	public TObjectIntHashMap<String> strcache = new TObjectIntHashMap<>();
-	public ArrayList<String> deccache = new ArrayList<>();
-	public int curcache = 0;
 	public MultiSet<String> starters = new MultiSet<>();
 	public int lookahead;
 	public int lookback;
@@ -86,18 +82,5 @@ public class Dataset {
 				+ " (Average saturation per pairing: " + 
 				(double)(int)((((double)occur) * 1000d) / (double)pairset.size()) / 1000d + ")\n "
 				+ " Number of starters (unique): " + starters.size() + "\n";
-	}
-	
-	public int cacheString(String str) {
-		if(strcache.containsKey(str)) {
-			return strcache.get(str);
-		} else {
-			deccache.add(str);
-			return strcache.put(str, curcache++);
-		}
-	}
-	
-	public String getForCache(int i) {
-		return deccache.get(i);
 	}
 }
