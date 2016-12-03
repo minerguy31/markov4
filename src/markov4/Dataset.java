@@ -1,8 +1,8 @@
 package markov4;
 
-import gnu.trove.map.hash.TObjectIntHashMap;
 
 import java.io.BufferedReader;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
@@ -10,9 +10,9 @@ import java.util.Random;
 import static jpkg.ngram.NGram.getPaired;
 import jpkg.collection.set.MultiSet;
 
-public class Dataset {
-	public HashMap<String, MultiSet<String>> pairset = new HashMap<>();
-	public MultiSet<String> starters = new MultiSet<>();
+public class Dataset implements Serializable {
+	public HashMap<String, MultiSet<String>> pairset = new HashMap<>(300000);
+	public MultiSet<String> starters = new MultiSet<>(1000);
 	public int lookahead;
 	public int lookback;
 	public int occur;
@@ -47,7 +47,7 @@ public class Dataset {
 		
 		MultiSet<String> element = pairset.get(predicate);
 		
-		if(element == null) pairset.put(predicate, element = new MultiSet<>());
+		if(element == null) pairset.put(predicate, element = new MultiSet<>(10));
 		
 		element.add(result);
 	}
@@ -62,7 +62,11 @@ public class Dataset {
 	
 	public String getSentence(Random rnd) {
 		StringBuilder sb = new StringBuilder(starters.getRandomElement(rnd));
+		int i = 0;
 		while(true) {
+			i++;
+			if(i > 500)
+				break;
 			MultiSet<String> p = pairset.get(sb.substring(sb.length() - lookahead));
 			if(p == null || sb.charAt(sb.length() - 1) == END_OF_MSG)
 				break;

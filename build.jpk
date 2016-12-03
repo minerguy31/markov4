@@ -1,3 +1,3 @@
-dependencies=multiset;ngram
+dependencies=ngram;multiset:v1;exec-cmd
 maintype=markov4.Main
 output-jar=bin/markov4-${branch}.jar
